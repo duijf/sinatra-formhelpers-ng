@@ -86,6 +86,15 @@ describe "Sinatra::FormHelpers methods" do
     fh.checkbox(:user, :devices, ['iPhone', 'iPad', 'iPod', 'iPoop']).should ==
       "<input checked=\"checked\" id=\"user_devices_iphone\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPhone\" /><label for=\"user_devices_iphone\">iPhone</label> <input checked=\"checked\" id=\"user_devices_ipad\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPad\" /><label for=\"user_devices_ipad\">iPad</label> <input id=\"user_devices_ipod\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPod\" /><label for=\"user_devices_ipod\">iPod</label> <input id=\"user_devices_ipoop\" name=\"user[devices][]\" type=\"checkbox\" value=\"iPoop\" /><label for=\"user_devices_ipoop\">iPoop</label>"
   end
+
+  it 'preprocesses options' do
+    context 'when options[:id?] is not specified' do
+      it 'sets options[:id?] to true' do
+        expect(options_preprocess({})).to satisfy { |x| x[:id?] == true }
+      end
+    end
+  end
+
 end
 
 describe "Sinatra::FormHelpers in app" do

@@ -148,6 +148,8 @@ module Sinatra
     #     #=> "<h1 class=\"page-title\">My awesome title</h1>"
     #
     def tag(name, content, attributes={})
+      attributes.reject!{|k,v| k==:id } unless options_preprocess( attributes )[:id?]
+      attributes.reject!{|k,v| k==:id?}
       unless content.nil?
         "<#{name.to_s} #{hash_to_html_attrs(attributes)}>#{content}</#{name.to_s}>"
       else
@@ -159,6 +161,8 @@ module Sinatra
     # single_tag :img, :src => "images/google.jpg"
     # => <img src="images/google.jpg" />
     def single_tag(name, options={})
+      options.reject!{|k,v| k==:id } unless options_preprocess( options )[:id?]
+      options.reject!{|k,v| k==:id? }
       "<#{name.to_s} #{hash_to_html_attrs(options)} />"
     end
 
@@ -207,6 +211,11 @@ module Sinatra
 
     def css_id(*things)
       things.compact.map{|t| t.to_s}.join('_').downcase.gsub(/\W/,'_')
+    end
+
+    def options_preprocess(options)
+      options[:id?] = true if options[:id?].nil? # set id? to true by default
+      options
     end
 
     class Fieldset
